@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Pending Items - Library of Things{% endblock %}
+
+{% block content %}
+<div class="row mb-4">
+    <div class="col-md-8">
+        <h1 class="fw-bold text-primary">Pending Items</h1>
+        <p class="text-muted">Review and approve user-submitted items.</p>
+    </div>
+</div>
+
+{% if items %}
+<div class="row g-4">
+    {% for item in items %}
+    <div class="col-md-6 col-lg-4">
+        <div class="card h-100 border-0 shadow-sm hover-shadow transition-all">
+            {% if item.image %}
+            <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}"
+                style="height: 200px; object-fit: cover;">
+            {% else %}
+            <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px;">
+                <i class="bi bi-box-seam text-muted fs-1"></i>
+            </div>
+            {% endif %}
+
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title fw-bold mb-0">{{ item.name }}</h5>
+                    <span class="badge bg-warning text-dark">Pending</span>
+                </div>
+                <p class="card-text text-muted small mb-2">
+                    <i class="bi bi-person me-1"></i> Submitted by {{ item.owner.username }}
+                </p>
+                <p class="card-text text-secondary text-truncate">{{ item.description }}</p>
+            </div>
+
+            <div class="card-footer bg-white border-top-0 pt-0 pb-3">
+                <div class="d-grid gap-2">
+                    <a href="{% url 'item_detail' item.id %}" class="btn btn-outline-primary btn-sm">
+                        <i class="bi bi-eye me-1"></i> Review Details
+                    </a>
+                    <form action="{% url 'approve_item' item.id %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success btn-sm w-100">
+                            <i class="bi bi-check-circle me-1"></i> Approve Item
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5">
+    <div class="mb-3">
+        <i class="bi bi-check2-all text-muted display-1"></i>
+    </div>
+    <h3 class="fw-bold text-secondary">All Caught Up!</h3>
+    <p class="text-muted">There are no pending items to review at this time.</p>
+</div>
+{% endif %}
+{% endblock %}

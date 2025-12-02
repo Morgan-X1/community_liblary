@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+
+{% block title %}My Items - Library of Things{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="fw-bold mb-0">My Listed Items</h2>
+    <a href="{% url 'add_item' %}" class="btn btn-primary shadow-soft">
+        <i class="bi bi-plus-lg me-2"></i> List New Item
+    </a>
+</div>
+
+{% if items %}
+<div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for item in items %}
+    <div class="col">
+        <div class="card h-100 border-0 shadow-sm hover-card">
+            <div class="position-relative">
+                {% if item.image %}
+                <img src="{{ item.image.url }}" class="card-img-top" alt="{{ item.name }}"
+                    style="height: 200px; object-fit: cover;">
+                {% else %}
+                <div class="card-img-top bg-light text-secondary d-flex align-items-center justify-content-center"
+                    style="height: 200px;">
+                    <i class="bi bi-image fs-1 opacity-25"></i>
+                </div>
+                {% endif %}
+                <span
+                    class="position-absolute top-0 end-0 m-2 badge {% if item.status == 'AVAILABLE' %}bg-success{% else %}bg-secondary{% endif %} shadow-sm">
+                    {{ item.get_status_display }}
+                </span>
+            </div>
+            <div class="card-body">
+                <h5 class="card-title fw-bold text-dark">{{ item.name }}</h5>
+                <p class="card-text text-muted small">{{ item.description|truncatechars:60 }}</p>
+                <div class="d-flex justify-content-between align-items-center mt-3">
+                    <a href="{% url 'item_detail' item.id %}" class="btn btn-sm btn-outline-primary">View</a>
+                    <a href="{% url 'edit_item' item.id %}" class="btn btn-sm btn-outline-secondary">
+                        <i class="bi bi-pencil me-1"></i> Edit
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<div class="text-center py-5 bg-white rounded shadow-sm">
+    <i class="bi bi-box-seam fs-1 text-muted mb-3 d-block"></i>
+    <h4 class="text-secondary">You haven't listed any items yet.</h4>
+    <p class="text-muted mb-4">Share your tools with the community!</p>
+    <a href="{% url 'add_item' %}" class="btn btn-primary btn-lg shadow-soft">
+        List Your First Item
+    </a>
+</div>
+{% endif %}
+{% endblock %}

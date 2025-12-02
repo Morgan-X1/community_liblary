@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}My Dashboard{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">My Dashboard</h2>
+
+<div class="card shadow mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">My Reservations</h5>
+    </div>
+    <div class="card-body">
+        {% if reservations %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Item</th>
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reservation in reservations %}
+                    <tr>
+                        <td>
+                            <a href="{% url 'item_detail' reservation.item.id %}">{{ reservation.item.name }}</a>
+                        </td>
+                        <td>{{ reservation.start_date }}</td>
+                        <td>{{ reservation.end_date }}</td>
+                        <td>
+                            <span
+                                class="badge bg-{% if reservation.status == 'ACTIVE' %}success{% elif reservation.status == 'PENDING' %}warning{% elif reservation.status == 'CANCELLED' %}danger{% else %}secondary{% endif %}">
+                                {{ reservation.get_status_display }}
+                            </span>
+                        </td>
+                        <td>
+                            {% if reservation.status == 'PENDING' %}
+                            <button class="btn btn-sm btn-outline-danger">Cancel</button>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted mb-0">You have no reservations yet.</p>
+        <a href="{% url 'catalog' %}" class="btn btn-primary mt-3">Browse Catalog</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

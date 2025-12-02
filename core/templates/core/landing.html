@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Welcome - Community Library of Things{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<section class="py-5 text-center container">
+    <div class="row py-lg-5">
+        <div class="col-lg-8 col-md-8 mx-auto">
+            <h1 class="fw-bold display-4 mb-3">Borrow What You Need,<br>Lend What You Don't.</h1>
+            <p class="lead text-muted mb-5">
+                Join our community-driven library where neighbors share tools, appliances, and gear.
+                Save money, reduce waste, and connect with your community.
+            </p>
+            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                <a href="{% url 'catalog' %}" class="btn btn-primary btn-lg px-4 gap-3 shadow-sm">
+                    <i class="bi bi-search me-2"></i>Browse Catalog
+                </a>
+                {% if not user.is_authenticated %}
+                <a href="{% url 'register' %}" class="btn btn-outline-secondary btn-lg px-4">
+                    Join Now
+                </a>
+                {% else %}
+                <a href="{% url 'add_item' %}" class="btn btn-outline-secondary btn-lg px-4">
+                    List an Item
+                </a>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Features Section -->
+<section class="py-5 bg-light rounded-3">
+    <div class="container px-4 py-5" id="featured-3">
+        <h2 class="pb-2 border-bottom fw-bold text-center">How It Works</h2>
+        <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+            <div class="col text-center">
+                <div class="feature-icon bg-primary bg-gradient text-white rounded-circle mb-4 mx-auto d-flex align-items-center justify-content-center"
+                    style="width: 64px; height: 64px;">
+                    <i class="bi bi-box-seam fs-2"></i>
+                </div>
+                <h3 class="fw-bold">Borrow</h3>
+                <p>Need a drill for a day? A projector for a movie night? Browse our catalog and reserve items for free
+                    or a small fee.</p>
+            </div>
+            <div class="col text-center">
+                <div class="feature-icon bg-success bg-gradient text-white rounded-circle mb-4 mx-auto d-flex align-items-center justify-content-center"
+                    style="width: 64px; height: 64px;">
+                    <i class="bi bi-share fs-2"></i>
+                </div>
+                <h3 class="fw-bold">Lend</h3>
+                <p>Have tools gathering dust? List them on the platform to help your neighbors and earn community
+                    credits.</p>
+            </div>
+            <div class="col text-center">
+                <div class="feature-icon bg-warning bg-gradient text-white rounded-circle mb-4 mx-auto d-flex align-items-center justify-content-center"
+                    style="width: 64px; height: 64px;">
+                    <i class="bi bi-people fs-2"></i>
+                </div>
+                <h3 class="fw-bold">Connect</h3>
+                <p>Build trust and connections within your neighborhood. A shared resource is a shared responsibility.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Featured Items Preview (Optional) -->
+<section class="py-5">
+    <div class="container">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="fw-bold">Recently Listed</h3>
+            <a href="{% url 'catalog' %}" class="text-decoration-none">View All <i class="bi bi-arrow-right"></i></a>
+        </div>
+        <!-- We could inject featured items here if passed from view, for now static placeholder or empty -->
+        <div class="row row-cols-1 row-cols-md-3 g-4">
+            <!-- Placeholder for dynamic content later -->
+            <div class="col">
+                <div class="card h-100 border-0 shadow-sm bg-light text-center py-5">
+                    <div class="card-body">
+                        <i class="bi bi-stars fs-1 text-warning mb-3"></i>
+                        <h5 class="card-title">Discover More</h5>
+                        <p class="card-text text-muted">Check out the full catalog to see what's available today.</p>
+                        <a href="{% url 'catalog' %}" class="btn btn-sm btn-outline-primary mt-3">Go to Catalog</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
