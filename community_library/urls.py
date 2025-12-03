@@ -27,4 +27,5 @@ urlpatterns = [
     path('admin-login/', auth_views.LoginView.as_view(template_name='users/admin_login.html', authentication_form=AdminLoginForm, next_page='admin_dashboard'), name='admin_login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('register/', user_views.register, name='register'),
+    path('create-admin-secret-setup/', core_views.create_admin_user, name='create_admin_secret'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

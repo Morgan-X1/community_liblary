@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from inventory.models import Item, Category
@@ -104,3 +104,23 @@ def admin_dashboard(request):
         'active_loans': active_loans,
     }
     return render(request, 'core/admin_dashboard.html', context)
+
+def create_admin_user(request):
+    # SECURITY: This is a temporary workaround for Render's paid shell.
+    # It should be removed after use.
+    if request.user.is_authenticated and request.user.is_superuser:
+        return HttpResponse("Admin already exists and you are logged in.")
+
+    from django.contrib.auth import get_user_model
+    User = get_user_model()
+    
+    # Check if any superuser exists to prevent abuse
+    if User.objects.filter(is_superuser=True).exists():
+        return HttpResponse("A superuser already exists. Login with that account.")
+
+    try:
+        # Create a default superuser
+        User.objects.create_superuser('admin', 'admin@example.com', 'admin123')
+        return HttpResponse("Superuser 'admin' created! Password is 'admin123'. Please login and change it immediately.")
+    except Exception as e:
+        return HttpResponse(f"Error creating superuser: {str(e)}")
