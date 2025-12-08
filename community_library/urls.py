@@ -19,6 +19,7 @@ urlpatterns = [
     path('my-items/', inventory_views.my_items, name='my_items'),
     path('add-item/', inventory_views.add_item, name='add_item'),
     path('edit-item/<int:item_id>/', inventory_views.edit_item, name='edit_item'),
+    path('delete-item/<int:item_id>/', inventory_views.delete_item, name='delete_item'),
     path('pending-items/', inventory_views.pending_items, name='pending_items'),
     path('approve-item/<int:item_id>/', inventory_views.approve_item, name='approve_item'),
     
@@ -27,5 +28,4 @@ urlpatterns = [
     path('admin-login/', auth_views.LoginView.as_view(template_name='users/admin_login.html', authentication_form=AdminLoginForm, next_page='admin_dashboard'), name='admin_login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='home'), name='logout'),
     path('register/', user_views.register, name='register'),
-    path('create-admin-secret-setup/', core_views.create_admin_user, name='create_admin_secret'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -33,13 +33,6 @@ def edit_item(request, item_id):
         form = ItemForm(request.POST, request.FILES, instance=item)
         if form.is_valid():
             item = form.save(commit=False)
-            # Reset to PENDING if edited by non-staff? Optional, but safer.
-            # For now, let's keep existing status or maybe reset if critical fields change.
-            # Simplicity: Don't reset status on edit for now, or maybe we should?
-            # Let's keep it simple: if you edit it, it stays as is unless we decide otherwise.
-            # Actually, to prevent abuse, maybe we should reset to PENDING?
-            # Let's stick to the user request: "admin must accept a user input items before accepting it"
-            # This implies new items.
             item.save()
             messages.success(request, f"{item.name} has been updated!")
             return redirect('my_items')
@@ -77,3 +70,12 @@ def approve_item(request, item_id):
         return redirect('pending_items')
     
     return redirect('pending_items')
+
+@login_required
+def delete_item(request, item_id):
+    item = get_object_or_404(Item, pk=item_id, owner=request.user)
+    if request.method == 'POST':
+        item.delete()
+        messages.success(request, f"{item.name} has been deleted successfully.")
+        return redirect('my_items')
+    return redirect('my_items')
